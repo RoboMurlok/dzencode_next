@@ -33,6 +33,7 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+      - ./server/dzencode.sql:/docker-entrypoint-initdb.d/dzencode.sql
 
 volumes:
   db_data:

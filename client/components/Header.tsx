@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import shield from "./../app/assets/shield.svg";
 import clock from "./../app/assets/clock.svg";

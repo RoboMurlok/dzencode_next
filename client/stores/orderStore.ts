@@ -1,0 +1,60 @@
+import { create } from "zustand";
+import { Order } from "../types/order";
+
+type OrderStore = {
+    orders: Order[];
+
+    addOrder: (order: Order) => void;
+    removeOrder: (id: number) => void;
+    setOrders: (orders: Order[]) => void;
+    getOrderById: (id: number) => Order | undefined;
+};
+
+export const useOrderStore = create<OrderStore>((set, get) => ({
+    orders: [],
+
+    addOrder: (order) =>
+        set((state) => ({
+            orders: [...state.orders, order],
+        })),
+
+    removeOrder: (id) =>
+        set((state) => ({
+            orders: state.orders.filter((p) => p.id !== id),
+        })),
+
+    setOrders: (orders) => set({ orders }),
+
+    getOrderById: (id) => {
+        return get().orders.find((o) => o.id === id);
+    }
+}));
+
+type UIStore = {
+  stealth: boolean;
+  offStealth: () => void;
+  onStealth: () => void;
+
+  activeCardId: number | null;
+  setActiveCard: (id: number | null) => void;
+
+  isModalOpen: boolean;
+  openModal: () => void;
+  closeModal: () => void;
+};
+
+export const useUIStore = create<UIStore>((set) => ({
+  stealth: false,
+
+  offStealth: () => set({ stealth: true }),
+  onStealth: () => set({ stealth: false }),
+
+  activeCardId: null,
+  setActiveCard: (id) => set({ activeCardId: id }),
+
+  isModalOpen: false,
+  openModal: () => set({ isModalOpen: true }),
+  closeModal: () => set({ isModalOpen: false }),
+}));
+
+

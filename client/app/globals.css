@@ -1,0 +1,86 @@
+:root {
+  --dark: #212529;
+  --dark-light: rgba(33, 37, 41, 0.5);
+  --gray: #6c757d;
+  --gray-light: rgba(108, 117, 125, 0.5);
+  --green: #198754;
+  --green-light: rgba(25, 135, 84, 0.5);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,body {
+  max-width: 100%;
+}
+
+aside,
+main {
+  box-shadow: inset 5px 5px 40px var(--gray-light);
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.select-wrapper::after {
+  content: "▼";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--gray-light);
+}
+
+.navLink {
+  text-decoration: none;
+
+  &:hover {
+    transform: scale(1.1);
+    text-decoration: underline;
+    text-decoration-color: var(--green);
+    text-underline-offset: 6px;
+    text-decoration-thickness: 3px;
+  }
+
+  &.active {
+    text-decoration: underline;
+    text-decoration-color: var(--green);
+    text-underline-offset: 6px;
+    text-decoration-thickness: 3px;
+  }
+}
+
+span {
+  font-size: 0.7rem;
+}
+
+.myHoverDelete {
+  transition: all 0.5s ease-in-out;
+
+  &:hover {
+    box-shadow: inset 5px 5px 40px #d73443 !important;
+  }
+
+  &:active {
+    box-shadow: inset 5px 5px 40px #efcfd2 !important;
+  }
+}
+
+.myHoverOpen {
+  transition: all 0.5s ease-in-out;
+
+  &:hover {
+    box-shadow: inset 5px 5px 40px #0d6efc !important;
+  }
+
+  &:active {
+    box-shadow: inset 5px 5px 40px #cfe2ff !important;
+  }
+}

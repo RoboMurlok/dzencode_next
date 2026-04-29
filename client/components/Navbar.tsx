@@ -7,6 +7,7 @@ import { ROUTES, NavLinkItem } from "./../types/routes";
 const navLinks: NavLinkItem[] = [
   { name: "Продукты", path: ROUTES.products },
   { name: "Ордера", path: ROUTES.orders },
+  { name: "Пользователь", path: ROUTES.user },
 ];
 
 export default function Navbar() {

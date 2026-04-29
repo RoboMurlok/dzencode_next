@@ -44,6 +44,7 @@ docker-compose up --build
 
 Порядок открытия
 
+в файле `server/.env` расскоментируйте данные для подключения к базе данных   # данные для Docker
 Сначала убедитесь, что backend запущен:
 http://localhost:5000
 Затем откройте frontend:
@@ -52,6 +53,8 @@ http://localhost:3000
 
 
 Установка без Docker
+
+в файле `server/.env` расскоментируйте данные для подключения к базе данных   # данные для localhost
 
 Backend
 cd server
@@ -63,7 +66,8 @@ cd client
 npm install
 npm run dev
 
-в файле `server/.env` расскоментируйте данные для подключения к базе данных
+Затем откройте frontend:
+http://localhost:3000
 
 
 

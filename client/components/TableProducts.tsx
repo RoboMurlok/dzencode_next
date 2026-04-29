@@ -16,6 +16,7 @@ export default function TableProducts({ items }: CardProps) {
   const stealth = useUIStore((s) => s.stealth);
   const onStealth = useUIStore((s) => s.onStealth);
   const setActiveCard = useUIStore((s) => s.setActiveCard);
+  const { openModal } = useUIStore();
   const title = items.products?.length
     ? items.products[0].incoming
     : "Нет данных";
@@ -42,6 +43,9 @@ export default function TableProducts({ items }: CardProps) {
         <button
           style={{ width: 26, height: 26, cursor: "pointer" }}
           className="d-flex align-items-center justify-content-center border-0 bg-success opacity-75 rounded-circle myHoverOpen"
+          onClick={() => {
+            openModal();
+          }}
         >
           <Image src={plus} alt="plus" width={16} height={16} />
         </button>

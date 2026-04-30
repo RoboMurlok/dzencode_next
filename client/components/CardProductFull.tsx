@@ -21,12 +21,14 @@ export default function CardProductFull({ items }: CardProps) {
     isNew,
     guarantee,
     specification,
-    prices,
+    price,
     group,
     person,
     incoming,
     date,
   } = items;
+
+  const exchangePrice = `${price.value / 40} USD`;
 
   const formatDate = new Date(date).toLocaleString("ru-RU");
   const guaranteeStart = new Date(guarantee.start).toLocaleString("ru-RU");
@@ -70,14 +72,14 @@ export default function CardProductFull({ items }: CardProps) {
         className="d-flex flex-column justify-content-center position-relative"
         style={{ width: 120 }}
       >
-        {prices?.[0] && (
+        {price && (
           <span className="fw-medium text-secondary m-0 text-opacity-50 position-absolute top-0">
-            {prices[0].value} {prices[0].symbol}
+            {exchangePrice}
           </span>
         )}
-        {prices?.[1] && (
+        {price && (
           <p className={cssFont}>
-            {prices[1].value} {prices[1].symbol}
+            {price.value} {price.symbol}
           </p>
         )}
       </div>

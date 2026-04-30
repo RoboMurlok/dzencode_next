@@ -1,7 +1,6 @@
 export type Price = {
   value: number;
   symbol: string;
-  isDefault: boolean;
 };
 
 export type Guarantee = {
@@ -18,7 +17,7 @@ export type Product = {
   type: string;
   specification: string;
   guarantee: Guarantee;
-  prices: Price[];
+  price: Price;
   incoming: string;
   group: string;
   person: string;

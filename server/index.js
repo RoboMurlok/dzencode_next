@@ -37,15 +37,14 @@ app.get("/products", async (req, res) => {
         products.order_id,
         products.created_at,
 
-        prices.value AS price_value,
-        prices.symbol AS price_symbol,
-        prices.is_default,
+        price.value AS price_value,
+        price.symbol AS price_symbol,
 
         guarantees.start AS guarantee_start,
         guarantees.end AS guarantee_end
 
       FROM products
-      LEFT JOIN prices ON prices.product_id = products.id
+      LEFT JOIN price ON price.product_id = products.id
       LEFT JOIN guarantees ON guarantees.product_id = products.id
     `);
 
@@ -69,18 +68,17 @@ app.get("/products", async (req, res) => {
           order: row.order_id,
           date: row.created_at,
 
-          prices: [],
+          price: null,
           guarantee: null,
         };
       }
 
       // prices
       if (row.price_value !== null) {
-        map[id].prices.push({
+        map[id].price={
           value: row.price_value,
           symbol: row.price_symbol,
-          isDefault: Boolean(row.is_default),
-        });
+        };
       }
 
       // guarantee
@@ -122,16 +120,15 @@ app.get("/orders", async (req, res) => {
         products.order_id,
         products.created_at,
 
-        prices.value AS price_value,
-        prices.symbol AS price_symbol,
-        prices.is_default,
+        price.value AS price_value,
+        price.symbol AS price_symbol,
 
         guarantees.start AS guarantee_start,
         guarantees.end AS guarantee_end
 
       FROM orders
       LEFT JOIN products ON products.order_id = orders.id
-      LEFT JOIN prices ON prices.product_id = products.id
+      LEFT JOIN price ON price.product_id = products.id
       LEFT JOIN guarantees ON guarantees.product_id = products.id
     `);
 
@@ -169,7 +166,7 @@ app.get("/orders", async (req, res) => {
             order: row.order_id,
             date: row.created_at,
 
-            prices: [],
+            price: null,
             guarantee: null,
           };
 
@@ -178,11 +175,11 @@ app.get("/orders", async (req, res) => {
 
         // prices
         if (row.price_value !== null) {
-          product.prices.push({
+          product.price={
             value: row.price_value,
             symbol: row.price_symbol,
             isDefault: Boolean(row.is_default),
-          });
+          };
         }
 
         // guarantee
@@ -255,9 +252,9 @@ app.post("/products", async (req, res) => {
     if (price && price.length) {
       for (const p of price) {
         await pool.query(
-          `INSERT INTO prices (product_id, value, symbol, is_default)
+          `INSERT INTO price (product_id, value, symbol)
            VALUES (?, ?, ?, ?)`,
-          [productId, p.value, p.symbol, p.isDefault ? 1 : 0],
+          [productId, p.value, p.symbol],
         );
       }
     }

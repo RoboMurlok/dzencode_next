@@ -21,14 +21,11 @@ export default function CardOrder({ items }: CardProps) {
   const setActiveCard = useUIStore((s) => s.setActiveCard);
   const isActive = activeCardId === items.id;
   const qwentity = items.products.length;
-  const sumUSD = items.products.reduce(
-    (acc, product) => acc + Number(product.prices[0].value),
-    0,
-  );
   const sumUAH = items.products.reduce(
-    (acc, product) => acc + Number(product.prices[1].value),
+    (acc, product) => acc + Number(product.price.value),
     0,
   );
+  const sumUSD = `${sumUAH / 40} USD`;
 
   return (
     <div
@@ -72,10 +69,10 @@ export default function CardOrder({ items }: CardProps) {
         style={{ width: 120 }}
       >
         <span className="fw-medium text-secondary m-0 text-opacity-50 position-absolute top-0">
-          {sumUSD} {items.products?.[0]?.prices?.[0]?.symbol}
+          {sumUSD}
         </span>
         <p className={cssFont}>
-          {sumUAH} {items.products?.[0]?.prices?.[0]?.symbol}
+          {sumUAH} {items.products?.[0]?.price?.symbol}
         </p>
       </div>
       <TrashIcon stealth={true} id={items.id} />

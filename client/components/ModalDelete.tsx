@@ -11,7 +11,34 @@ export default function ModalDelete() {
   const { setActiveCard } = useProductStore();
   const id = useProductStore((s) => s.activeCardId);
   const product = useProductStore((s) => s.products.find((p) => p.id === id));
-  const removeProduct = useProductStore((s) => s.removeProduct);
+
+  const deleteProduct = async (id: number) => {
+    try {
+      const res = await fetch("http://localhost:5000/delete", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`HTTP ${res.status}: ${text}`);
+      }
+
+      closeModal();
+      setActiveCard(null);
+    } catch (error) {
+      console.error("Ошибка при удалении продукта:", error);
+      alert("Ошибка при удалении продукта");
+    }
+  };
+
+  const handleDelete = () => {
+  if (id === null) return;
+  deleteProduct(id);
+};
 
   return (
     <div>
@@ -52,11 +79,7 @@ export default function ModalDelete() {
         </button>
         <button
           className="d-flex align-items-center gap-2 border-0 bg-white text-danger rounded-pill px-4 py-1 myHoverDelete"
-          onClick={() => {
-            // if (id !== null) removeProduct(id);
-            closeModal();
-            setActiveCard(null);
-          }}
+          onClick={handleDelete}
         >
           <Image src={trashRed} alt="trash" width={12} height={12} />
           Удалить

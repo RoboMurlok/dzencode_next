@@ -6,7 +6,6 @@ type ProductStore = {
   activeCardId: number | null;
 
   addProduct: (product: Product) => void;
-  removeProduct: (id: number) => void;
   setProducts: (products: Product[]) => void;
   setActiveCard: (id: number | null) => void;
 };
@@ -18,11 +17,6 @@ export const useProductStore = create<ProductStore>((set) => ({
   addProduct: (product) =>
     set((state) => ({
       products: [...state.products, product],
-    })),
-
-  removeProduct: (id) =>
-    set((state) => ({
-      products: state.products.filter((p) => p.id !== id),
     })),
 
   setProducts: (products) => set({ products }),

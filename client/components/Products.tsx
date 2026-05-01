@@ -25,7 +25,6 @@ export default function Products() {
       .then((res) => res.json())
       .then((data) => setProducts(data));
   }, []);
-  
 
   return (
     <Animation>
@@ -47,7 +46,9 @@ export default function Products() {
                   >
                     <option value="">Все</option>
                     <option value="монитор">монитор</option>
-                    <option value="телевизор">телевизор</option>
+                    <option value="системный блок">системный блок</option>
+                    <option value="клавиатура">клавиатура</option>
+                    <option value="мышь">мышь</option>
                   </select>
                 </div>
               </div>

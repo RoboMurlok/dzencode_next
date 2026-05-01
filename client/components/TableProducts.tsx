@@ -15,7 +15,7 @@ type CardProps = {
 export default function TableProducts({ items }: CardProps) {
   const stealth = useUIStore((s) => s.stealth);
   const onStealth = useUIStore((s) => s.onStealth);
-  const setActiveCard = useUIStore((s) => s.setActiveCard);
+  const setActiveOrder = useUIStore((s) => s.setActiveOrder);
   const { openModal } = useUIStore();
   const title = items.products?.length
     ? items.products[0].incoming
@@ -29,13 +29,13 @@ export default function TableProducts({ items }: CardProps) {
         image={close}
         alt="close"
         style={{
-          top: "-20px",
-          right: "-20px",
+          top: "0px",
+          right: "0px",
           cursor: "pointer",
         }}
         onClick={() => {
           onStealth();
-          setActiveCard(null);
+          setActiveOrder(null);
         }}
       />
       <h5 className="fw-bold text-black opacity-75 px-4 pt-4">{title}</h5>

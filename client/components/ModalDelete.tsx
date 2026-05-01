@@ -8,10 +8,10 @@ import { useProductStore } from "./../stores/productStore";
 
 export default function ModalDelete() {
   const { closeModal } = useUIStore();
+  const { setActiveCard } = useProductStore();
   const id = useProductStore((s) => s.activeCardId);
   const product = useProductStore((s) => s.products.find((p) => p.id === id));
   const removeProduct = useProductStore((s) => s.removeProduct);
-  
 
   return (
     <div>
@@ -43,14 +43,19 @@ export default function ModalDelete() {
       <div className="d-flex justify-content-end gap-2 bg-success p-4">
         <button
           className="btn bg-success text-white rounded-pill px-4 py-1 myHoverOpen"
-          onClick={closeModal}
+          onClick={() => {
+            closeModal();
+            setActiveCard(null);
+          }}
         >
           Отменить
         </button>
         <button
           className="d-flex align-items-center gap-2 border-0 bg-white text-danger rounded-pill px-4 py-1 myHoverDelete"
           onClick={() => {
-            if (id !== null) removeProduct(id);
+            // if (id !== null) removeProduct(id);
+            closeModal();
+            setActiveCard(null);
           }}
         >
           <Image src={trashRed} alt="trash" width={12} height={12} />

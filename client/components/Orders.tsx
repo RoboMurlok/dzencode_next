@@ -9,8 +9,8 @@ import TableProducts from "./TableProducts";
 export default function Orders() {
   const setOrders = useOrderStore((s) => s.setOrders);
   const orders = useOrderStore((state) => state.orders);
-  const activeCardId = useUIStore((s) => s.activeCardId);
-  const activeOrder = orders.find((order) => order.id === activeCardId);
+  const activeOrderdId = useUIStore((s) => s.activeOrderdId);
+  const activeOrder = orders.find((order) => order.id === activeOrderdId);
 
   useEffect(() => {
       fetch("http://localhost:5000/orders")

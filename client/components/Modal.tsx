@@ -9,8 +9,7 @@ import ModalAdd from "./ModalAdd";
 
 export default function Modal() {
   const { isModalOpen, closeModal } = useUIStore();
-  // const id = useProductStore((s) => s.activeCardId);
-  const id=null
+  const id = useProductStore((s) => s.activeCardId);
 
   if (!isModalOpen) return null;
 
@@ -24,13 +23,15 @@ export default function Modal() {
           image={close}
           alt="close"
           style={{
-            top: "-20px",
-            right: "-20px",
+            top: "0px",
+            right: "0px",
             cursor: "pointer",
           }}
-          onClick={closeModal}
+          onClick={() => {
+            closeModal();
+          }}
         />
-       {  id ? <ModalDelete /> : <ModalAdd />}
+        {id ? <ModalDelete /> : <ModalAdd />}
       </div>
     </div>
   );

@@ -17,15 +17,18 @@ const cssFont = "fw-medium text-black-50 m-0";
 export default function CardOrder({ items }: CardProps) {
   const stealth = useUIStore((s) => s.stealth);
   const offStealth = useUIStore((s) => s.offStealth);
-  const activeCardId = useUIStore((s) => s.activeCardId);
-  const setActiveCard = useUIStore((s) => s.setActiveCard);
-  const isActive = activeCardId === items.id;
+  const activeOrderdId = useUIStore((s) => s.activeOrderdId);
+  const setActiveOrder = useUIStore((s) => s.setActiveOrder);
+  const isActive = activeOrderdId === items.id;
   const qwentity = items.products.length;
   const sumUAH = items.products.reduce(
     (acc, product) => acc + Number(product.price.value),
     0,
   );
   const sumUSD = `${sumUAH / 40} USD`;
+
+   const formatDate = new Date(items.date).toLocaleString("ru-RU");
+  
 
   return (
     <div
@@ -44,7 +47,7 @@ export default function CardOrder({ items }: CardProps) {
         style={{ width: 50, cursor: "pointer" }}
         onClick={() => {
           offStealth();
-          setActiveCard(items.id);
+          setActiveOrder(items.id);
         }}
       >
         <Image src={menu} alt="menu" width={20} height={20} />
@@ -62,7 +65,7 @@ export default function CardOrder({ items }: CardProps) {
         <span className="fw-medium text-secondary m-1 text-opacity-50 position-absolute bottom-50">
           10/12
         </span>
-        <p className={cssFont}>{items.date}</p>
+        <p className={cssFont}>{formatDate}</p>
       </div>
       <div
         className={`d-flex flex-column justify-content-center position-relative ${stealth ? "d-none" : ""}`}

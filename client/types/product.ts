@@ -11,7 +11,7 @@ export type Guarantee = {
 export type Product = {
   id: number;
   serialNumber: number;
-  isNew: boolean; 
+  isNew: boolean;
   photo: string;
   title: string;
   type: string;
@@ -24,3 +24,5 @@ export type Product = {
   order: number;
   date: string;
 };
+
+export type CreateProduct = Omit<Product, "id" | "date">; 

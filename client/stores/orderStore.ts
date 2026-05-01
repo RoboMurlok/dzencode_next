@@ -35,8 +35,8 @@ type UIStore = {
   offStealth: () => void;
   onStealth: () => void;
 
-  activeCardId: number | null;
-  setActiveCard: (id: number | null) => void;
+  activeOrderdId: number | null;
+  setActiveOrder: (id: number | null) => void;
 
   isModalOpen: boolean;
   openModal: () => void;
@@ -49,8 +49,8 @@ export const useUIStore = create<UIStore>((set) => ({
   offStealth: () => set({ stealth: true }),
   onStealth: () => set({ stealth: false }),
 
-  activeCardId: null,
-  setActiveCard: (id) => set({ activeCardId: id }),
+  activeOrderdId: null,
+  setActiveOrder: (id) => set({ activeOrderdId: id }),
 
   isModalOpen: false,
   openModal: () => set({ isModalOpen: true }),

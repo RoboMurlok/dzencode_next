@@ -14,16 +14,19 @@ export default function TrashIcon({ stealth, id }: CircleProps) {
   const { openModal } = useUIStore();
   const setActiveCard = useProductStore((s) => s.setActiveCard);
 
+   
+
   return (
     <div
-      className={`${cssCentre} bg-danger-subtle ${stealth ? "d-none" : ""} rounded-circle myHoverDelete`}
-      style={{ width: 50, cursor: "pointer" }}
+      className={`${cssCentre} d-flex bg-danger-subtle ${stealth ? "d-none" : ""} rounded-circle myHoverDelete`}
+      style={{ width: 40, height:40, cursor: "pointer" }}
       onClick={() => {
         openModal();
         setActiveCard(id);
       }}
     >
-      <Image src={trash} alt="trash" width={20} height={20} />
+      <Image src={trash} alt="trash" width={16} height={16} />
     </div>
   );
 }
+

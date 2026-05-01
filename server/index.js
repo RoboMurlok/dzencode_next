@@ -75,7 +75,7 @@ app.get("/products", async (req, res) => {
 
       // prices
       if (row.price_value !== null) {
-        map[id].price={
+        map[id].price = {
           value: row.price_value,
           symbol: row.price_symbol,
         };
@@ -175,7 +175,7 @@ app.get("/orders", async (req, res) => {
 
         // prices
         if (row.price_value !== null) {
-          product.price={
+          product.price = {
             value: row.price_value,
             symbol: row.price_symbol,
             isDefault: Boolean(row.is_default),
@@ -201,8 +201,74 @@ app.get("/orders", async (req, res) => {
 
 // CREATE PRODUCT
 app.post("/products", async (req, res) => {
-  try {
-    const {
+//   try {
+//     const {
+//       serialNumber,
+//       isNew,
+//       photo,
+//       title,
+//       type,
+//       specification,
+//       guarantee,
+//       price,
+//       incoming,
+//       group,
+//       person,
+//       order,
+//     } = req.body;
+
+//     const [productResult] = await pool.query(
+//       `INSERT INTO products
+//       (serial_number, is_new, photo, title, type, specification, incoming, product_group, person, order_id)
+//       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+//       [
+//         serialNumber,
+//         isNew ? 1 : 0,
+//         photo,
+//         title,
+//         type,
+//         specification,
+//         incoming,
+//         group,
+//         person,
+//         order,
+//       ],
+//     );
+
+//     const productId = productResult.insertId;
+
+//     // guarantee
+//     if (guarantee) {
+//       await pool.query(
+//         `INSERT INTO guarantees (product_id, start, end)
+//          VALUES (?, ?, ?)`,
+//         [productId, guarantee.start, guarantee.end],
+//       );
+//     }
+
+//     // prices
+//     if (price && price.length) {
+//       for (const p of price) {
+//         await pool.query(
+//           `INSERT INTO price (product_id, value, symbol)
+//            VALUES (?, ?, ?, ?)`,
+//           [productId, p.value, p.symbol],
+//         );
+//       }
+//     }
+
+//     res.json({ message: "Product created", productId });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Server error" });
+//   }
+
+const connection = await pool.getConnection();
+
+try {
+  await connection.beginTransaction();
+
+      const {
       serialNumber,
       isNew,
       photo,
@@ -215,56 +281,61 @@ app.post("/products", async (req, res) => {
       group,
       person,
       order,
-      date,
     } = req.body;
 
-    const [productResult] = await pool.query(
-      `INSERT INTO products 
-      (serial_number, is_new, photo, title, type, specification, incoming, product_group, person, order_id, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        serialNumber,
-        isNew ? 1 : 0,
-        photo,
-        title,
-        type,
-        specification,
-        incoming,
-        group,
-        person,
-        order,
-        date,
-      ],
+  const [productResult] = await connection.query(
+    `INSERT INTO products 
+     (serial_number, is_new, photo, title, type, specification, incoming, product_group, person, order_id)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      serialNumber,
+      isNew ? 1 : 0,
+      photo,
+      title,
+      type,
+      specification,
+      incoming,
+      group,
+      person,
+      order,
+    ],
+  );
+
+  const productId = productResult.insertId;
+
+  if (guarantee) {
+    await connection.query(
+      `INSERT INTO guarantees (product_id, start, end)
+       VALUES (?, ?, ?)`,
+      [productId, guarantee.start, guarantee.end],
     );
-
-    const productId = productResult.insertId;
-
-    // guarantee
-    if (guarantee) {
-      await pool.query(
-        `INSERT INTO guarantees (product_id, start, end)
-         VALUES (?, ?, ?)`,
-        [productId, guarantee.start, guarantee.end],
-      );
-    }
-
-    // prices
-    if (price && price.length) {
-      for (const p of price) {
-        await pool.query(
-          `INSERT INTO price (product_id, value, symbol)
-           VALUES (?, ?, ?, ?)`,
-          [productId, p.value, p.symbol],
-        );
-      }
-    }
-
-    res.json({ message: "Product created", productId });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
   }
+
+  if (price) {
+    await connection.query(
+      `INSERT INTO price (product_id, value, symbol)
+       VALUES (?, ?, ?)`,
+      [productId, price.value, price.symbol],
+    );
+  }
+
+  await connection.commit();
+
+  res.json({ message: "Product created", productId });
+
+} catch (error) {
+  await connection.rollback();
+  console.error(error);
+  res.status(500).json({ error: "Server error" });
+} finally {
+  connection.release();
+}
+
+
+
 });
+
+
 
 const users = new Set();
 

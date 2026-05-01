@@ -35,7 +35,7 @@ export default function CardProductFull({ items }: CardProps) {
   const guaranteeEnd = new Date(guarantee.end).toLocaleString("ru-RU");
 
   return (
-    <div className="d-flex gap-2 border border-success border-opacity-25 rounded-1 px-4 py-2 bg-white">
+    <div className="d-flex jastify-content-between gap-3 border border-success border-opacity-25 rounded-1 px-4 py-2 bg-white">
       <div className={cssCentre} style={{ width: 20 }}>
         {isNew ? (
           <a className="p-1 bg-warning rounded-circle"></a>
@@ -46,7 +46,7 @@ export default function CardProductFull({ items }: CardProps) {
       <div className={cssCentre} style={{ width: 50 }}>
         <Image src={photo} alt="product" width={40} height={40} />
       </div>
-      <div className="d-flex flex-column" style={{ width: 400 }}>
+      <div className="d-flex flex-column" style={{ width: 520 }}>
         <p className="fw-bolder text-black-50 m-0 text-decoration-underline">
           {title}
         </p>
@@ -66,7 +66,11 @@ export default function CardProductFull({ items }: CardProps) {
         <p className={cssFont}>по {guaranteeEnd}</p>
       </div>
       <div className={cssLeft} style={{ width: 60 }}>
-        <p className={cssFont}>{specification}</p>
+        {isNew ? (
+          <p className="text-success m-0">{specification}</p>
+        ) : (
+          <p className="text-black m-0">{specification}</p>
+        )}
       </div>
       <div
         className="d-flex flex-column justify-content-center position-relative"
@@ -83,7 +87,7 @@ export default function CardProductFull({ items }: CardProps) {
           </p>
         )}
       </div>
-      <div className={cssLeft} style={{ width: 300 }}>
+      <div className={cssLeft} style={{ width: 240 }}>
         <p className={cssFont}>{group}</p>
       </div>
       {person ? (
@@ -95,7 +99,7 @@ export default function CardProductFull({ items }: CardProps) {
           <p className={cssFont}>&ndash;</p>
         </div>
       )}
-      <div className={cssLeft} style={{ width: 300 }}>
+      <div className={cssLeft} style={{ width: 240 }}>
         <p className={cssFont}>{incoming}</p>
       </div>
       <div

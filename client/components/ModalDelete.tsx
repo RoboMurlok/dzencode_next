@@ -7,6 +7,7 @@ import { useUIStore } from "./../stores/orderStore";
 import { useProductStore } from "./../stores/productStore";
 
 export default function ModalDelete() {
+  const { removeProduct } = useProductStore();
   const { closeModal } = useUIStore();
   const { setActiveCard } = useProductStore();
   const id = useProductStore((s) => s.activeCardId);
@@ -27,6 +28,7 @@ export default function ModalDelete() {
         throw new Error(`HTTP ${res.status}: ${text}`);
       }
 
+      removeProduct(id);
       closeModal();
       setActiveCard(null);
     } catch (error) {
@@ -36,9 +38,9 @@ export default function ModalDelete() {
   };
 
   const handleDelete = () => {
-  if (id === null) return;
-  deleteProduct(id);
-};
+    if (id === null) return;
+    deleteProduct(id);
+  };
 
   return (
     <div>

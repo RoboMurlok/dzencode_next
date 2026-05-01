@@ -125,10 +125,12 @@ export default function ModalAdd() {
       }
 
       const createdProduct = await res.json();
+      console.log(createdProduct);
 
       // 👉 обновление стора (если есть)
       // addProduct(createdProduct);
       closeModal();
+      
     } catch (error) {
       console.error("Ошибка при создании продукта:", error);
       alert("Ошибка при создании продукта:");

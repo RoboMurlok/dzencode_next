@@ -115,7 +115,7 @@ app.delete("/delete", async (req, res) => {
 app.get("/orders", async (req, res) => {
   try {
     const [rows] = await pool.query(`
-     SELECT 
+    SELECT 
         orders.id AS order_id,
         orders.title AS order_title,
         orders.description,
@@ -131,8 +131,8 @@ app.get("/orders", async (req, res) => {
         products.incoming,
         products.product_group,
         products.person,
-        products.order_id,
-        products.created_at,
+        products.order_id AS product_order_id,
+        products.created_at AS product_created_at,
 
         price.value AS price_value,
         price.symbol AS price_symbol,
@@ -140,10 +140,10 @@ app.get("/orders", async (req, res) => {
         guarantees.start AS guarantee_start,
         guarantees.end AS guarantee_end
 
-      FROM orders
-      LEFT JOIN products ON products.order_id = orders.id
-      LEFT JOIN price ON price.product_id = products.id
-      LEFT JOIN guarantees ON guarantees.product_id = products.id
+        FROM orders
+        LEFT JOIN products ON products.order_id = orders.id
+        LEFT JOIN price ON price.product_id = products.id
+        LEFT JOIN guarantees ON guarantees.product_id = products.id
     `);
 
     const map = {};
@@ -162,7 +162,7 @@ app.get("/orders", async (req, res) => {
         };
       }
 
-      if (productId) {
+    if (productId !== null) {
         let product = map[orderId].products.find((p) => p.id === productId);
 
         if (!product) {
@@ -215,7 +215,6 @@ app.get("/orders", async (req, res) => {
 
 // CREATE PRODUCT
 app.post("/products", async (req, res) => {
-
   const connection = await pool.getConnection();
 
   try {

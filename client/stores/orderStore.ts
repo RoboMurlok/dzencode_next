@@ -7,10 +7,9 @@ type OrderStore = {
     addOrder: (order: Order) => void;
     removeOrder: (id: number) => void;
     setOrders: (orders: Order[]) => void;
-    getOrderById: (id: number) => Order | undefined;
 };
 
-export const useOrderStore = create<OrderStore>((set, get) => ({
+export const useOrderStore = create<OrderStore>((set) => ({
     orders: [],
 
     addOrder: (order) =>
@@ -23,11 +22,11 @@ export const useOrderStore = create<OrderStore>((set, get) => ({
             orders: state.orders.filter((p) => p.id !== id),
         })),
 
-    setOrders: (orders) => set({ orders }),
+  setOrders: (orders) =>
+  set({
+    orders: [...orders].sort((a, b) => a.id - b.id),
+  }),
 
-    getOrderById: (id) => {
-        return get().orders.find((o) => o.id === id);
-    }
 }));
 
 

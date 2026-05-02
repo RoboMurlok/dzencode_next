@@ -27,8 +27,7 @@ export default function CardOrder({ items }: CardProps) {
   );
   const sumUSD = `${sumUAH / 40} USD`;
 
-   const formatDate = new Date(items.date).toLocaleString("ru-RU");
-  
+  const formatDate = new Date(items.date).toLocaleString("ru-RU");
 
   return (
     <div
@@ -40,11 +39,12 @@ export default function CardOrder({ items }: CardProps) {
         className={`${cssLeft} ${stealth ? "d-none" : ""}`}
         style={{ width: 300 }}
       >
-        <p className={`${cssFont} text-decoration-underline`}>{items.title}</p>
+           <p className={`${cssFont} text-decoration-underline`}>Ордер {items.id}</p>
+        {/* <p className={`${cssFont} text-decoration-underline`}>{items.title}</p> */}
       </div>
       <div
         className={`${cssCentre} bg-primary-subtle border rounded-circle myHoverOpen`}
-        style={{ width: 50, cursor: "pointer" }}
+        style={{ width: 40, height: 40, cursor: "pointer" }}
         onClick={() => {
           offStealth();
           setActiveOrder(items.id);
@@ -78,7 +78,7 @@ export default function CardOrder({ items }: CardProps) {
           {sumUAH} {items.products?.[0]?.price?.symbol}
         </p>
       </div>
-      <TrashIcon stealth={stealth} id={items.id} modalType="deleteOrder"/>
+      <TrashIcon stealth={stealth} id={items.id} modalType="deleteOrder" />
     </div>
   );
 }

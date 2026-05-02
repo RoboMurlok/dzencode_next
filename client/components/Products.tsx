@@ -26,6 +26,7 @@ export default function Products() {
       .then((data) => setProducts(data));
   }, []);
 
+
   return (
     <Animation>
       <section className="d-flex flex-column gap-5">

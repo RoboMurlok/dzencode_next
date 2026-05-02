@@ -4,12 +4,16 @@ import close from "./../app/assets/close.svg";
 import Circle from "./Circle";
 import { useUIStore } from "./../stores/orderStore";
 import { useProductStore } from "./../stores/productStore";
-import ModalDelete from "./ModalDelete";
-import ModalAdd from "./ModalAdd";
+import ModalDeleteProduct from "./ModalDeleteProduct";
+import ModalAddProduct from "./ModalAddProduct";
+import ModalDeleteOrder from "./ModalDeleteOrder";
+import ModalAddOrder from "./ModalAddOrder";  
 
 export default function Modal() {
-  const { isModalOpen, closeModal } = useUIStore();
-  const id = useProductStore((s) => s.activeCardId);
+  const isModalOpen = useUIStore((s) => s.isModalOpen);
+  const closeModal = useUIStore((s) => s.closeModal);
+  const modalType = useUIStore((s) => s.modalType);
+  const setActiveCard = useProductStore((s) => s.setActiveCard);
 
   if (!isModalOpen) return null;
 
@@ -28,10 +32,14 @@ export default function Modal() {
             cursor: "pointer",
           }}
           onClick={() => {
+            setActiveCard(null);
             closeModal();
           }}
         />
-        {id ? <ModalDelete /> : <ModalAdd />}
+        {isModalOpen && modalType === "addProduct" && <ModalAddProduct />}
+        {isModalOpen && modalType === "deleteProduct" && <ModalDeleteProduct />}
+        {isModalOpen && modalType === "deleteOrder" && <ModalDeleteOrder />}
+        {isModalOpen && modalType === "addOrder" && <ModalAddOrder />}
       </div>
     </div>
   );

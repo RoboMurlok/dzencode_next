@@ -111,7 +111,7 @@ export default function CardProductFull({ items }: CardProps) {
         </span>
         <p className={cssFont}>{formatDate}</p>
       </div>
-      <TrashIcon id={id} />
+      <TrashIcon id={id} modalType="deleteProduct" />
     </div>
   );
 }

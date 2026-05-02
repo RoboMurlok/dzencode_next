@@ -3,32 +3,40 @@
 import Image from "next/image";
 import trashRed from "./../app/assets/trashRed.svg";
 const cssCentre = "d-flex align-items-center justify-content-center";
-import { useUIStore } from "./../stores/orderStore";
-import { useProductStore } from "./../stores/productStore";
+import { useUIStore, useOrderStore } from "../stores/orderStore";
+import { useProductStore } from "../stores/productStore";
 
-export default function ModalDelete() {
-  const { removeProduct } = useProductStore();
-  const { closeModal } = useUIStore();
-  const { setActiveCard } = useProductStore();
-  const id = useProductStore((s) => s.activeCardId);
-  const product = useProductStore((s) => s.products.find((p) => p.id === id));
+export default function ModalDeleteProduct() {
+  const setOrders = useOrderStore((s) => s.setOrders);
+  const closeModal = useUIStore((s) => s.closeModal);
+  const removeProduct = useProductStore((s) => s.removeProduct);
+  const setActiveCard = useProductStore((s) => s.setActiveCard);
+  const activeCardId = useProductStore((s) => s.activeCardId);
+  const product = useProductStore((s) =>
+    s.products.find((p) => p.id === activeCardId),
+  );
 
-  const deleteProduct = async (id: number) => {
+  const deleteProduct = async (activeCardId: number) => {
+    console.log(activeCardId);
+
     try {
-      const res = await fetch("http://localhost:5000/delete", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        `http://localhost:5000/products/${activeCardId}`,
+        {
+          method: "DELETE",
         },
-        body: JSON.stringify({ id }),
-      });
+      );
 
       if (!res.ok) {
         const text = await res.text();
         throw new Error(`HTTP ${res.status}: ${text}`);
       }
 
-      removeProduct(id);
+      fetch("http://localhost:5000/orders")
+        .then((res) => res.json())
+        .then((data) => setOrders(data));
+
+      removeProduct(activeCardId);
       closeModal();
       setActiveCard(null);
     } catch (error) {
@@ -38,8 +46,8 @@ export default function ModalDelete() {
   };
 
   const handleDelete = () => {
-    if (id === null) return;
-    deleteProduct(id);
+    if (activeCardId === null) return;
+    deleteProduct(activeCardId);
   };
 
   return (

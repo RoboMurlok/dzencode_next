@@ -8,3 +8,10 @@ export type Order = {
     description: string
     products: Product[]
 }
+
+export type CreateOrder = {
+    title: string
+    description: string
+}
+
+export type ModalType = "addProduct" | "deleteProduct" | "deleteOrder" | "addOrder" | null;

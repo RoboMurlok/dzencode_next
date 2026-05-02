@@ -1,11 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { CreateProduct } from "./../types/product";
-import { useUIStore } from "./../stores/orderStore";
+import { CreateProduct } from "../types/product";
+import { useUIStore, useOrderStore } from "../stores/orderStore";
+import { useProductStore } from "./../stores/productStore";
 
-export default function ModalAdd() {
-  const { activeOrderdId, closeModal } = useUIStore();
+export default function ModalAddProduct() {
+  const setProducts = useProductStore((s) => s.setProducts);
+  const activeOrderdId = useUIStore((s) => s.activeOrderdId);
+  const closeModal = useUIStore((s) => s.closeModal);
+  const setOrders = useOrderStore((s) => s.setOrders);
 
   const [form, setForm] = useState({
     serialNumber: "",
@@ -82,8 +86,7 @@ export default function ModalAdd() {
       !form.title ||
       !form.type ||
       !form.price ||
-      !form.group ||
-      !form.person
+      !form.group
     ) {
       alert("Заполни обязательные поля");
       return;
@@ -125,12 +128,16 @@ export default function ModalAdd() {
       }
 
       const createdProduct = await res.json();
-      console.log(createdProduct);
 
-      // 👉 обновление стора (если есть)
-      // addProduct(createdProduct);
+      fetch("http://localhost:5000/orders")
+        .then((res) => res.json())
+        .then((data) => setOrders(data));
+
+      fetch("http://localhost:5000/products")
+        .then((res) => res.json())
+        .then((data) => setProducts(data));
+
       closeModal();
-      
     } catch (error) {
       console.error("Ошибка при создании продукта:", error);
       alert("Ошибка при создании продукта:");

@@ -97,12 +97,82 @@ app.get("/products", async (req, res) => {
   }
 });
 
-// DELETE PRODUCT
-app.delete("/delete", async (req, res) => {
+// CREATE PRODUCT
+app.post("/products", async (req, res) => {
+  const connection = await pool.getConnection();
+
   try {
-    const { id } = req.body;
+    await connection.beginTransaction();
+
+    const {
+      serialNumber,
+      isNew,
+      photo,
+      title,
+      type,
+      specification,
+      guarantee,
+      price,
+      incoming,
+      group,
+      person,
+      order,
+    } = req.body;
+
+    const [productResult] = await connection.query(
+      `INSERT INTO products 
+     (serial_number, is_new, photo, title, type, specification, incoming, product_group, person, order_id)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        serialNumber,
+        isNew ? 1 : 0,
+        photo,
+        title,
+        type,
+        specification,
+        incoming,
+        group,
+        person,
+        order,
+      ],
+    );
+
+    const productId = productResult.insertId;
+
+    if (guarantee) {
+      await connection.query(
+        `INSERT INTO guarantees (product_id, start, end)
+       VALUES (?, ?, ?)`,
+        [productId, guarantee.start, guarantee.end],
+      );
+    }
+
+    if (price) {
+      await connection.query(
+        `INSERT INTO price (product_id, value, symbol)
+       VALUES (?, ?, ?)`,
+        [productId, price.value, price.symbol],
+      );
+    }
+
+    await connection.commit();
+
+    res.json({ message: "Product created", productId });
+  } catch (error) {
+    await connection.rollback();
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  } finally {
+    connection.release();
+  }
+});
+
+// DELETE PRODUCT
+app.delete("/products/:id", async (req, res) => {
+   try {
+    const { id } = req.params;
     const [result] = await pool.query("DELETE FROM products WHERE id = ?", [
-      id,
+      id
     ]);
     res.json(result);
   } catch (error) {
@@ -213,75 +283,48 @@ app.get("/orders", async (req, res) => {
   }
 });
 
-// CREATE PRODUCT
-app.post("/products", async (req, res) => {
-  const connection = await pool.getConnection();
-
+// CREATE ORDER
+app.post("/orders", async (req, res) => {
   try {
-    await connection.beginTransaction();
-
-    const {
-      serialNumber,
-      isNew,
-      photo,
-      title,
-      type,
-      specification,
-      guarantee,
-      price,
-      incoming,
-      group,
-      person,
-      order,
-    } = req.body;
-
-    const [productResult] = await connection.query(
-      `INSERT INTO products 
-     (serial_number, is_new, photo, title, type, specification, incoming, product_group, person, order_id)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        serialNumber,
-        isNew ? 1 : 0,
-        photo,
-        title,
-        type,
-        specification,
-        incoming,
-        group,
-        person,
-        order,
-      ],
+    const { title, description } = req.body;
+    const [result] = await pool.query(
+      "INSERT INTO orders (title, description) VALUES (?, ?)",
+      [title, description]
     );
-
-    const productId = productResult.insertId;
-
-    if (guarantee) {
-      await connection.query(
-        `INSERT INTO guarantees (product_id, start, end)
-       VALUES (?, ?, ?)`,
-        [productId, guarantee.start, guarantee.end],
-      );
-    }
-
-    if (price) {
-      await connection.query(
-        `INSERT INTO price (product_id, value, symbol)
-       VALUES (?, ?, ?)`,
-        [productId, price.value, price.symbol],
-      );
-    }
-
-    await connection.commit();
-
-    res.json({ message: "Product created", productId });
+    res.json(result);
   } catch (error) {
-    await connection.rollback();
     console.error(error);
-    res.status(500).json({ error: "Server error" });
-  } finally {
-    connection.release();
+    res.status(500).json({ error: error.message });
   }
 });
+
+// DELETE ORDER
+app.delete("/orders/:id", async (req, res) => {
+  
+  try {
+    const { id } = req.params;
+
+    const [result] = await pool.query(
+      "DELETE FROM orders WHERE id = ?",
+      [id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.json({ message: "Order deleted" });
+  } catch (error) {
+    console.error("Ошибка при удалении ордера:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+
+
+
+// WEBSOCKET
 
 const users = new Set();
 

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Order } from "../types/order";
+import { Order, ModalType } from "../types/order";
 
 type OrderStore = {
     orders: Order[];
@@ -30,6 +30,7 @@ export const useOrderStore = create<OrderStore>((set, get) => ({
     }
 }));
 
+
 type UIStore = {
   stealth: boolean;
   offStealth: () => void;
@@ -39,7 +40,9 @@ type UIStore = {
   setActiveOrder: (id: number | null) => void;
 
   isModalOpen: boolean;
-  openModal: () => void;
+  modalType: ModalType;
+
+  openModal: (type: ModalType) => void;
   closeModal: () => void;
 };
 
@@ -53,8 +56,19 @@ export const useUIStore = create<UIStore>((set) => ({
   setActiveOrder: (id) => set({ activeOrderdId: id }),
 
   isModalOpen: false,
-  openModal: () => set({ isModalOpen: true }),
-  closeModal: () => set({ isModalOpen: false }),
+  modalType: null,
+
+  openModal: (type) =>
+    set({
+      isModalOpen: true,
+      modalType: type,
+    }),
+
+  closeModal: () =>
+    set({
+      isModalOpen: false,
+      modalType: null,
+    }),
 }));
 
 

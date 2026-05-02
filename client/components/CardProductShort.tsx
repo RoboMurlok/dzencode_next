@@ -41,7 +41,7 @@ export default function CardProductShort({ items }: CardProps) {
           <p className="fw-medium text-black small m-0">в работе</p>
         )}
       </div>
-      <TrashIcon stealth={false} id={id}/>
+      <TrashIcon id={id} modalType="deleteProduct" />
     </div>
   );
 }

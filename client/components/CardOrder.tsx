@@ -78,7 +78,7 @@ export default function CardOrder({ items }: CardProps) {
           {sumUAH} {items.products?.[0]?.price?.symbol}
         </p>
       </div>
-      <TrashIcon stealth={true} id={items.id} />
+      <TrashIcon stealth={stealth} id={items.id} modalType="deleteOrder"/>
     </div>
   );
 }

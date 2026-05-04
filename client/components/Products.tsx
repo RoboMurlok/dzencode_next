@@ -6,6 +6,7 @@ import { useProductStore } from "./../stores/productStore";
 import CardProductFull from "./CardProductFull";
 
 export default function Products() {
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const setProducts = useProductStore((s) => s.setProducts);
   const [type, setType] = useState("");
   const [cert, setCert] = useState("");
@@ -21,7 +22,7 @@ export default function Products() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:5000/products")
+    fetch(`${baseUrl}/products`)
       .then((res) => res.json())
       .then((data) => setProducts(data));
   }, []);

@@ -6,6 +6,7 @@ import { useUIStore, useOrderStore } from "./../stores/orderStore";
 import { useProductStore } from "./../stores/productStore";
 
 export default function ModalDelete() {
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const setActiveCard = useProductStore((s) => s.setActiveCard);
   const removeOrder = useOrderStore((s) => s.removeOrder);
   const closeModal = useUIStore((s) => s.closeModal);
@@ -14,7 +15,7 @@ export default function ModalDelete() {
   const deleteOrder = async (activeCardId: number) => {
     
     try {
-      const res = await fetch(`http://localhost:5000/orders/${activeCardId}`, {
+      const res = await fetch(`${baseUrl}/orders/${activeCardId}`, {
         method: "DELETE",
       });
 

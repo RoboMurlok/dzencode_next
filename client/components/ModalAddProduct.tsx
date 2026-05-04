@@ -5,7 +5,9 @@ import { CreateProduct } from "../types/product";
 import { useUIStore, useOrderStore } from "../stores/orderStore";
 import { useProductStore } from "./../stores/productStore";
 
+
 export default function ModalAddProduct() {
+const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const setProducts = useProductStore((s) => s.setProducts);
   const activeOrderdId = useUIStore((s) => s.activeOrderdId);
   const closeModal = useUIStore((s) => s.closeModal);
@@ -114,7 +116,7 @@ export default function ModalAddProduct() {
     };
 
     try {
-      const res = await fetch("http://localhost:5000/products", {
+      const res = await fetch(`${baseUrl}/products`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -129,11 +131,11 @@ export default function ModalAddProduct() {
 
       const createdProduct = await res.json();
 
-      fetch("http://localhost:5000/orders")
+      fetch(`${baseUrl}/orders`)
         .then((res) => res.json())
         .then((data) => setOrders(data));
 
-      fetch("http://localhost:5000/products")
+      fetch(`${baseUrl}/products`)
         .then((res) => res.json())
         .then((data) => setProducts(data));
 

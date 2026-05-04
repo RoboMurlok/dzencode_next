@@ -7,6 +7,7 @@ import { useUIStore, useOrderStore } from "../stores/orderStore";
 import { useProductStore } from "../stores/productStore";
 
 export default function ModalDeleteProduct() {
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const setOrders = useOrderStore((s) => s.setOrders);
   const closeModal = useUIStore((s) => s.closeModal);
   const removeProduct = useProductStore((s) => s.removeProduct);
@@ -21,7 +22,7 @@ export default function ModalDeleteProduct() {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/products/${activeCardId}`,
+        `${baseUrl}/products/${activeCardId}`,
         {
           method: "DELETE",
         },
@@ -32,7 +33,7 @@ export default function ModalDeleteProduct() {
         throw new Error(`HTTP ${res.status}: ${text}`);
       }
 
-      fetch("http://localhost:5000/orders")
+      fetch(`${baseUrl}/orders`)
         .then((res) => res.json())
         .then((data) => setOrders(data));
 

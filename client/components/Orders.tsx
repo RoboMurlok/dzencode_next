@@ -9,6 +9,7 @@ import CardOrder from "./CardOrder";
 import TableProducts from "./TableProducts";
 
 export default function Orders() {
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const setOrders = useOrderStore((s) => s.setOrders);
   const orders = useOrderStore((state) => state.orders);
   const openModal = useUIStore((s) => s.openModal);
@@ -16,7 +17,7 @@ export default function Orders() {
   const activeOrder = orders.find((order) => order.id === activeOrderdId);
 
   useEffect(() => {
-    fetch("http://localhost:5000/orders")
+    fetch(`${baseUrl}/orders`)
       .then((res) => res.json())
       .then((data) => setOrders(data));
   }, []);

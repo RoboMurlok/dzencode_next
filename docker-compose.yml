@@ -28,12 +28,12 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: dzencode
+      MYSQL_DATABASE: test
     ports:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
-      - ./server/dzencode.sql:/docker-entrypoint-initdb.d/dzencode.sql
+      - ./server/test.sql:/docker-entrypoint-initdb.d/test.sql
 
 volumes:
   db_data:
